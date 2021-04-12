@@ -6,7 +6,9 @@ The bootloader for the sprocket is [`sprocket-boot`]. It is written in Rust.
 
 ## Installing
 
-Build [`sprocket-boot`] with a nightly compiler, and flash with `probe-run` or however you flash binaries using an SWD adapter.
+Build [`sprocket-boot`] with a nightly compiler, and flash with `probe-run` or
+however you flash binaries using an SWD adapter. In the future, I plan to build an
+application that can be used to update the bootloader without a debugger.
 
 ## Memory Layout
 
@@ -22,11 +24,20 @@ NOTE: Both the application and the bootloader must respect these regions.
 
 ## How it works
 
-Sprocket boot doesn't actually relocate the vector table, or own the vector table itself. It depends on the reset vector and MSP of the application to contain the reset address and stack address of the bootloader.
+Sprocket boot doesn't actually relocate the vector table, or own the vector table itself.
+It depends on the reset vector and MSP of the application to contain the reset address
+and stack address of the bootloader.
 
-This is achieved by hot-patching the application image when bootloading with the proper bootloader information. It then stores the Application's reset vector and MSP in the Settings page.
+This is achieved by hot-patching the application image when bootloading with the proper
+bootloader information. It then stores the Application's reset vector and MSP in the
+Settings page.
 
-This means that if you use SWD (or some other means, like DFU), you will likely break the bootloader, unless you manually apply these changes.
+This means that if you use SWD (or some other means, like DFU), you will likely break
+the bootloader, unless you manually apply these changes. It also means that the bootloader
+cannot use interrupts (or frameworks like RTIC) at all.
+
+The STM32G031 does (I think?) support the use of the VTOR, so I may remove this hot-patching
+limitation/innovation/hack in the future.
 
 ## The boot sequence
 

@@ -2,6 +2,8 @@
 
 This is the documentation repo for sprocket boards. Sprocket boards are not commercially available at the moment.
 
+See the [GitHub Organization](https://github.com/sprocket-board/) for more information and source.
+
 ## The Sprocket-G031
 
 ![Sprocket Board Renders](./images/sprocket-renders.jpg)
