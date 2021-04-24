@@ -1,0 +1,6 @@
+[submodule "hal"]
+	path = hal
+	url = https://github.com/sprocket-board/stm32g0xx-hal.git
+[submodule "crates/groundhog-stm32g031"]
+	path = crates/groundhog-stm32g031
+	url = https://github.com/sprocket-board/groundhog-stm32g031

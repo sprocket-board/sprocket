@@ -1,0 +1,18 @@
+[package]
+name = "bsp"
+version = "0.1.0"
+authors = ["James Munns <james.munns@ferrous-systems.com>"]
+edition = "2018"
+
+[dependencies]
+ws2812-spi = "0.4.0"
+smart-leds = "0.3.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies.groundhog-stm32g031]
+path = "../crates/groundhog-stm32g031"
+
+[dependencies.stm32g0xx-hal]
+path = "../hal"
+features = ["rt", "stm32g031"]

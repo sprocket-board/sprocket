@@ -1,0 +1,24 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+runner = "probe-run --chip STM32G031G8Ux"
+rustflags = [
+  "-C", "link-arg=-Tlink.x",
+
+  # NOTE: You must uncomment this if you want to use the `defmt-log` feature!
+  # "-C", "link-arg=-Tdefmt.x",
+
+  # This is needed if your flash or ram addresses are not aligned to 0x10000 in memory.x
+  # See https://github.com/rust-embedded/cortex-m-quickstart/pull/95
+  "-C", "link-arg=--nmagic",
+]
+
+[build]
+target = "thumbv6m-none-eabi"    # Cortex-M0 and Cortex-M0+
+
+# This is for a tiny bootloader
+# [unstable]
+# build-std = ["core"]
+# build-std-features = ["panic_immediate_abort"]
+
+[alias]
+rb = "run --bin"
+rrb = "run --release --bin"
