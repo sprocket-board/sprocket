@@ -4,3 +4,6 @@
 [submodule "crates/groundhog-stm32g031"]
 	path = crates/groundhog-stm32g031
 	url = https://github.com/sprocket-board/groundhog-stm32g031
+[submodule "crates/cassette"]
+	path = crates/cassette
+	url = https://github.com/jamesmunns/cassette

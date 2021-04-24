@@ -49,16 +49,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "46afbd2983a5d5a7bd740ccb198caf5b82f45c40c09c0eed36052d91cb92e719"
 
 [[package]]
-name = "bsp"
-version = "0.1.0"
-dependencies = [
- "groundhog-stm32g031",
- "smart-leds 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "stm32g0xx-hal 0.1.0",
- "ws2812-spi 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "bytemuck"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -431,6 +421,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebf6d833fa93f16a1c1874e62c2aebe8567e5bdd436d59bf543ed258b6f7a8e3"
 dependencies = [
  "rgb",
+]
+
+[[package]]
+name = "sprocket-bsp"
+version = "0.1.0"
+dependencies = [
+ "groundhog-stm32g031",
+ "smart-leds 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "stm32g0xx-hal 0.1.0",
+ "ws2812-spi 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

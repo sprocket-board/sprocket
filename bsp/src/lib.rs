@@ -21,7 +21,8 @@ use ws2812_spi::{Ws2812, MODE};
 #[allow(unused_imports)]
 use smart_leds::{RGB8, SmartLedsWrite, colors, gamma};
 
-use groundhog_stm32g031::GlobalRollingTimer;
+pub use groundhog_stm32g031 as groundhog;
+use crate::groundhog::GlobalRollingTimer;
 
 pub struct Sprocket {
     // Onboard accessories
@@ -138,6 +139,10 @@ impl Sprocket {
         GlobalRollingTimer::init(board.TIM2);
 
         Some(spkt)
+    }
+
+    pub fn timer() -> GlobalRollingTimer {
+        GlobalRollingTimer::new()
     }
 }
 
