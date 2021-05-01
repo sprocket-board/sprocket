@@ -2,4 +2,7 @@
 members = [
     "hal",
     "bsp",
+    "apps/async-playground",
+    "apps/hello-world",
+    "apps/rtic-world",
 ]

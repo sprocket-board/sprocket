@@ -92,6 +92,9 @@ impl Sprocket {
         );
         let smartled = Ws2812::new(smartled_spi);
 
+        // TODO: read the settings page (or ram page?) for
+        // I2C address, and possibly which peripherals to
+        // load
         let i2c1 = I2CPeripheral::new(
             board.I2C1,
             gpiob.pb7,
