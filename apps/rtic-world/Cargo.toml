@@ -1,6 +1,6 @@
 [package]
 authors = ["James Munns <james.munns@ferrous-systems.com>"]
-name = "hello-world"
+name = "rtic-world"
 edition = "2018"
 version = "0.1.0"
 license = "MPL-2.0"
@@ -15,6 +15,13 @@ defmt = "0.2.0"
 defmt-rtt = "0.2.0"
 panic-probe = { version = "0.2.0", features = ["print-defmt"] }
 sprocket-bsp = { path = "../../bsp" }
+cortex-m-rtic = "0.5.6"
+cassette = "0.2.3"
+
+[dependencies.static-alloc]
+version = "0.2.2"
+features = ["polyfill"]
+path = "../../crates/static-alloc/static-alloc"
 
 [features]
 # set logging levels here

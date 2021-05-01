@@ -1,11 +1,11 @@
 #![no_main]
 #![no_std]
 
-use hello_world as _; // global logger + panicking-behavior + memory layout
+use rtic_world as _; // global logger + panicking-behavior + memory layout
 
 #[cortex_m_rt::entry]
 fn main() -> ! {
     defmt::info!("Hello, world!");
 
-    hello_world::exit()
+    rtic_world::exit()
 }

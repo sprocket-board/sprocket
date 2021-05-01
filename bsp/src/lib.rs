@@ -1,13 +1,13 @@
 #![no_std]
 
-use stm32g0xx_hal as hal;
+pub use stm32g0xx_hal as hal;
 use hal::{
-    stm32::{self, SPI2, I2C1},
+    stm32::{self, SPI2, I2C1, EXTI},
     prelude::*,
     spi::{Spi, NoSck, NoMiso},
     gpio::{
         gpioa, gpiob, gpioc,
-        Analog,
+        Analog, Input, Floating, Output, PushPull,
     },
     i2c_periph::I2CPeripheral,
     rcc::{
@@ -26,10 +26,10 @@ use crate::groundhog::GlobalRollingTimer;
 
 pub struct Sprocket {
     // Onboard accessories
-    pub button1: gpioc::PC14<Analog>,
-    pub button2: gpioc::PC15<Analog>,
-    pub led1: gpioa::PA0<Analog>,
-    pub led2: gpiob::PB8<Analog>,
+    pub button1: gpioc::PC14<Input<Floating>>,
+    pub button2: gpioc::PC15<Input<Floating>>,
+    pub led1: gpioa::PA0<Output<PushPull>>,
+    pub led2: gpiob::PB8<Output<PushPull>>,
     pub smartled: Ws2812<Spi<SPI2, (NoSck, NoMiso, gpioa::PA4<Analog>)>>,
 
     // GPIO port
@@ -61,16 +61,13 @@ pub struct Sprocket {
     pub swdio: gpioa::PA13<Analog>,
     pub swclk: gpioa::PA14<Analog>, // also boot0
 
-    pub core: stm32::CorePeripherals,
-
     // TODO: All the other stuff from `board`
-
+    pub exti: EXTI,
 }
 
 impl Sprocket {
     pub fn new() -> Option<Self> {
         let board = stm32::Peripherals::take()?;
-        let core = stm32::CorePeripherals::take()?;
 
         // Configure clocks
         let config = Config::pll()
@@ -103,11 +100,16 @@ impl Sprocket {
             0x69,
         );
 
+        let mut led1 = gpioa.pa0.into_push_pull_output();
+        led1.set_high().ok();
+        let mut led2 = gpiob.pb8.into_push_pull_output();
+        led2.set_high().ok();
+
         let spkt = Sprocket {
-            button1: gpioc.pc14,
-            button2: gpioc.pc15,
-            led1: gpioa.pa0,
-            led2: gpiob.pb8,
+            button1: gpioc.pc14.into_floating_input(),
+            button2: gpioc.pc15.into_floating_input(),
+            led1,
+            led2,
             smartled,
 
             gpio1: gpioa.pa1,
@@ -135,7 +137,7 @@ impl Sprocket {
             swdio: gpioa.pa13,
             swclk: gpioa.pa14, // also boot0
 
-            core,
+            exti: board.EXTI,
         };
 
         // Initialize global timer

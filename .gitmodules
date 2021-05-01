@@ -7,3 +7,6 @@
 [submodule "crates/cassette"]
 	path = crates/cassette
 	url = https://github.com/jamesmunns/cassette
+[submodule "crates/static-alloc"]
+	path = crates/static-alloc
+	url = https://github.com/jamesmunns/static-alloc.git
