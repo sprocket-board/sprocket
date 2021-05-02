@@ -17,6 +17,7 @@ panic-probe = { version = "0.2.0", features = ["print-defmt"] }
 sprocket-bsp = { path = "../../bsp" }
 cortex-m-rtic = "0.5.6"
 cassette = "0.2.3"
+heapless = "0.6.1"
 
 [dependencies.static-alloc]
 version = "0.2.2"
