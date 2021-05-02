@@ -21,10 +21,11 @@ use sprocket_bsp::{
     hal::gpio::{gpioa::PA0, gpiob::PB8, Output, PushPull, SignalEdge},
     hal::prelude::*,
     Sprocket,
+    groundhog::RollingTimer,
 };
 use static_alloc::Bump;
 
-static A: Bump<[u8; 1024]> = Bump::uninit();
+static A: Bump<[u8; 64]> = Bump::uninit();
 type StaticCassette<O> = Cassette<Pin<&'static mut (dyn Future<Output = O> + Send)>>;
 
 fn caser<T, F, O>(data: T, func: fn(&'static mut T) -> F) -> Result<StaticCassette<O>, ()>
@@ -145,17 +146,37 @@ impl MainHandler {
 
 impl StepdownButton {
     async fn entry(&mut self) {
-        loop {
-            for _ in 0..(self.count + 1 / 2) {
-                self.led1.set_low().ok();
-                yield_now().await;
-                self.led1.set_high().ok();
-                yield_now().await;
-                self.ttl_ct = self.ttl_ct.wrapping_add(1);
+        let mut debounce = 0u32;
+        let mut bounces;
 
-                // ding
-                defmt::unwrap!(self.tx.enqueue(self.ttl_ct));
+        loop {
+            let mut countup = 0;
+            bounces = 0;
+            'inner: loop {
+                let timer = Sprocket::timer();
+
+                if timer.millis_since(debounce) < 250 {
+                    bounces += 1;
+                    yield_now().await;
+                    continue 'inner;
+                }
+                debounce = timer.get_ticks();
+
+                countup += 1;
+                defmt::info!("{=usize}", countup);
+                self.led1.toggle().ok();
+
+                if countup >= self.count {
+                    break 'inner;
+                }
+
+                yield_now().await;
             }
+
+            // ding
+            defmt::unwrap!(self.tx.enqueue(self.ttl_ct));
+            defmt::info!("Bounce: {=u32}", bounces);
+            yield_now().await;
         }
     }
 }
