@@ -146,36 +146,35 @@ impl MainHandler {
 
 impl StepdownButton {
     async fn entry(&mut self) {
+        // Time (in ticks) of the last click
         let mut debounce = 0u32;
-        let mut bounces;
+        // The number of bounces since the last stepdown
+        let mut bounces = 0u32;
+        // The current counting value
+        let mut countup = 0;
 
         loop {
-            let mut countup = 0;
-            bounces = 0;
-            'inner: loop {
-                let timer = Sprocket::timer();
+            let timer = Sprocket::timer();
 
-                if timer.millis_since(debounce) < 250 {
-                    bounces += 1;
-                    yield_now().await;
-                    continue 'inner;
-                }
+            if timer.millis_since(debounce) < 250 {
+                bounces = bounces.saturating_add(1);
+            } else {
                 debounce = timer.get_ticks();
-
                 countup += 1;
+
+                // We toggle our LED (and report current count) on
+                // every button press
                 defmt::info!("{=usize}", countup);
                 self.led1.toggle().ok();
 
+                // Have we reached the desired stepdown count?
                 if countup >= self.count {
-                    break 'inner;
+                    defmt::unwrap!(self.tx.enqueue(self.ttl_ct));
+                    defmt::info!("Bounce: {=u32}", bounces);
+                    bounces = 0;
                 }
-
-                yield_now().await;
             }
 
-            // ding
-            defmt::unwrap!(self.tx.enqueue(self.ttl_ct));
-            defmt::info!("Bounce: {=u32}", bounces);
             yield_now().await;
         }
     }
