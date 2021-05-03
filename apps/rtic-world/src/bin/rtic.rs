@@ -12,9 +12,7 @@ use rtic::app;
 
 use cassette::{yield_now, Cassette, futures::poll_fn};
 use heapless::{
-    i,
     spsc::{Queue, Consumer, Producer},
-    consts,
 };
 use sprocket_bsp::{
     hal::exti::{Event, ExtiExt},
@@ -60,7 +58,7 @@ const APP: () = {
 
     #[init]
     fn init(_ctx: init::Context) -> init::LateResources {
-        static mut BTN_TO_MAIN: Queue<u32, consts::U16> = Queue(i::Queue::new());
+        static mut BTN_TO_MAIN: Queue<u32, 16> = Queue::new();
 
         defmt::info!("Hello, world!");
         let board = defmt::unwrap!(Sprocket::new());
@@ -121,7 +119,7 @@ const APP: () = {
 struct StepdownButton {
     count: usize,
     led1: PA0<Output<PushPull>>,
-    tx: Producer<'static, u32, consts::U16>,
+    tx: Producer<'static, u32, 16>,
     ttl_ct: u32,
 }
 
@@ -181,11 +179,11 @@ impl StepdownButton {
 }
 
 struct AsyncConsumer {
-    cons: Consumer<'static, u32, consts::U16>,
+    cons: Consumer<'static, u32, 16>,
 }
 
 impl AsyncConsumer {
-    fn new(cons: Consumer<'static, u32, consts::U16>) -> Self {
+    fn new(cons: Consumer<'static, u32, 16>) -> Self {
         Self {
             cons,
         }
