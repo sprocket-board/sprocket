@@ -1,6 +1,6 @@
 [package]
 authors = ["James Munns <james.munns@ferrous-systems.com>"]
-name = "hello-world"
+name = "rtic-world"
 edition = "2018"
 version = "0.1.0"
 license = "MPL-2.0"
