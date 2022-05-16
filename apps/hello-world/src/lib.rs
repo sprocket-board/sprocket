@@ -4,8 +4,9 @@ use defmt_rtt as _; // global logger
 use sprocket_bsp::{
     self as _,
     Sprocket,
-    groundhog::RollingTimer,
 }; // memory layout
+
+use groundhog::RollingTimer;
 
 use panic_probe as _;
 
